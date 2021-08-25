@@ -1,0 +1,35 @@
+
+/*
+This is a sample function. Uncomment to execute or make changes to this function.
+invoiceID = invoice.get("invoice_id");
+invoicedate = invoice.get("date").toDate();
+organizationID = organization.get("organization_id");
+*/
+organizationID = organization.get("organization_id");
+authtoken = "fd162ba3ea5c13b516a177920a79f2c3";
+// try to apply a payment against invoice //
+paymap = Map();
+totalpay = invoice.get("total").toDecimal();
+customerID = invoice.get("customer_id");
+invoiceID = invoice.get("invoice_id");
+paymap.put("customer_id",customerID);
+paymap.put("payment_mode","bankremittance");
+paymap.put("amount",totalpay);
+paymap.put("date",invoice.get("date"));
+paymap.put("reference_number",invoice.get("reference_number"));
+payinvlist = List();
+payinvmap = Map();
+payinvmap.put("invoice_id",invoiceID);
+payinvmap.put("amount_applied",totalpay);
+payinvlist.add(payinvmap);
+paymap.put("invoices",payinvlist);
+jsonString = Map();
+jsonString.put("JSONString",paymap);
+info jsonString;
+payinv = invokeurl
+[
+	url :"https://inventory.zoho.com/api/v1/customerpayments?authtoken=" + authtoken + "&organization_id=" + organizationID
+	type :POST
+	parameters:jsonString
+];
+info payinv.toMap().get("message");
